@@ -8,7 +8,7 @@ supabase.auth.onAuthStateChange((event, session) => {
     console.log(event, session)
     if (session) user.set(session.user)
     else user.set(null);
-})
+});
 
 user.login = async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({email, password});

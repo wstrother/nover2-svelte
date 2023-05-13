@@ -2,7 +2,7 @@
     import { game } from '$lib/stores/game.js';
     export let data;
 
-    game.set_game_id(data.room_id);
+    game.set_room_id(data.room_id);
     game.load_data();
 </script>
 

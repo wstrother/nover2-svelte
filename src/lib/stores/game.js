@@ -1,69 +1,69 @@
 import { supabase } from "$lib/supabaseClient";
 import { writable } from "svelte/store";
 
-const game_data = { room_id: null };
 
-const reset_data = () => {
-    Object.assign(game_data, {
-        host: null,
-        opponent: null,
-        public: null,
-        winner: null,
-        goal: null,
-        viewable: null
-    });
+class Game {
+    constructor() {
+        this.room_id = null;
+        this.host = null;
+        this.opponent = null;
+        this.public = null;
+        this.winner = null;
+        this.goal = null;
+        this.viewable = null;
+        this.turns = [];
+    }
+
+    update_data(data) {
+        Object.keys(this).filter(k => Object.keys(data).includes(k))
+            .forEach(key => {
+                this[key] = data[key];
+            });
+    }
+
+    reset_data() {
+        this.update_data(new Game());
+    }
 }
-reset_data();
 
-const update_data = data => {
-    game_data.viewable = true;
-    Object.assign(game_data, data);
-}
+const current_game = new Game();
 
-export const game = new writable(game_data);
-
-game.set_room_id = async (room_id) => {
-    game_data.room_id = room_id;
-    game.set(game_data);
-     
-    supabase.channel('any')
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rooms', filter: `id=eq.${room_id}`}, payload => {
-        if (payload.new) {
-            update_data(payload.new);
-            game.set(game_data);
-        }
-    })
-    .subscribe();
-}
+export const game = new writable(current_game);
 
 game.load_data = async () => {
-    if (game_data.room_id) {
+    if (current_game.room_id) {
         const { data, error} = await supabase
             .from('rooms')
             .select('*')
-            .eq('id', game_data.room_id);
+            .eq('id', current_game.room_id);
         
-        if ( error ) { 
-            console.log(error);
-            reset_data();
-        };
-    
-        if ( data ) {
-            if (data[0]) {
-                update_data(data[0]);
-                // game_data.viewable = true;
-                // game_data.host = data[0].host;
-                // game_data.public = data[0].host;
-                // game_data.opponent = data[0].opponent;
-                // game_data.winner = data[0].winner;
-                // game_data.goal = data[0].goal;
-            } else { reset_data(); }
+        if ( error ) console.log(error);
+        if ( data && data[0]) {
+            current_game.viewable = true;
+            current_game.update_data(data[0]);
+        } else {
+            current_game.reset_data();
         }
     }
-
-    game.set(game_data);
+    game.set(current_game);
 }
 
 supabase.auth.onAuthStateChange(() => {
     game.load_data();
 });
+
+game.set_room_id = (room_id) => {
+    current_game.room_id = room_id;
+
+    supabase.channel('any')
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rooms', filter: `id=eq.${room_id}`}, payload => {
+            if (payload.new) {
+                console.log(payload.new);
+                current_game.update_data(payload.new);
+                game.set(current_game);
+            }
+        })
+        .subscribe();
+    
+    game.load_data();
+}

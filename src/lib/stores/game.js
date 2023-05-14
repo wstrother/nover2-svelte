@@ -17,13 +17,19 @@ class Turn {
 
 class Game {
     constructor() {
-        this.room_id = null;
-        this.host = null;
-        this.opponent = null;
-        this.public = null;
-        this.winner = null;
-        this.goal = null;
         this.viewable = null;
+
+        this.room_id = null;
+        this.public = null;
+        this.goal = null;
+        
+        this.host_name = null;
+        this.host = null;
+
+        this.opponent_name = null;
+        this.opponent = null;
+        
+        this.winner = null;
         this.turns = [];
     }
 
@@ -68,7 +74,7 @@ game.load_data = async () => {
         
         if (error) console.log(error);
         if (data && data[0]) {
-
+            console.log(data[0])
             current_game.viewable = true;
             current_game.update_data(data[0]);
             game.load_turns();
@@ -89,6 +95,7 @@ game.load_turns = async () => {
 
         if (error) console.log(error);
         if (data) {
+            console.log(data)
             current_game.set_turns(data);
         }
     

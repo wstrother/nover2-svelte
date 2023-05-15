@@ -44,14 +44,10 @@ export const game = new writable(current_game);
 game.load_data = async () => {
     if (current_game.room_id) {
         const {data, error} = await supabase.rpc('get_game_data', {rid: current_game.room_id});
-            // .from('rooms')
-            // .select('*')
-            // .eq('id', current_game.room_id);
         
         if (error) console.log(error);
         if (data && data[0]) {
             current_game.viewable = true;
-            console.log(data[0])
             current_game.update_data(data[0]);
             game.load_turn();
 
@@ -65,14 +61,9 @@ game.load_data = async () => {
 
 game.load_turn = async () => {
     const {data, error} = await supabase.rpc('get_current_turn', {rid: current_game.room_id});
-        // .from('turns')
-        // .select('*')
-        // .eq('room_id', current_game.room_id)
-        // .order('created_at');
 
         if (error) console.log(error);
         if (data && data[0]) {
-            // console.log(data)
             current_game.update_data(data[0]);
         }
     

@@ -43,7 +43,7 @@ export const game = new writable(current_game);
 
 game.load_data = async () => {
     if (current_game.room_id) {
-        const {data, error} = await supabase.rpc('get_game_data', {room_id: current_game.room_id});
+        const {data, error} = await supabase.rpc('get_game_data', {rid: current_game.room_id});
             // .from('rooms')
             // .select('*')
             // .eq('id', current_game.room_id);

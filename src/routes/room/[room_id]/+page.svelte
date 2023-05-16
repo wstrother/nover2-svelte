@@ -2,25 +2,23 @@
     import { game } from '$lib/stores/game.js';
     import Scoreboard from '$lib/components/room/scoreboard.svelte';
     import Turnboard from '$lib/components/room/turnboard.svelte';
+    import RoomHeader from '$lib/components/room/roomHeader.svelte';
     export let data;
 
     game.set_room_id(data.room_id);
     game.load_data();
 </script>
 
-<h1>ROOM { data.room_id }</h1>
 
 {#if !$game.viewable}
-    <p>You cannot view this game</p>
-    
+<p>You cannot view this game</p>
+
 {:else}
-    {#if $game.goal}
-    <h3>First to { $game.goal } wins</h3>
-    {/if}
+    <div class="grid grid-cols-2 gap-4 px-5">
+        <RoomHeader goal={$game.goal} name={$game.room_name ?? `Room ${$game.room_id}`} />
 
-    <h3>Turn number {$game.turn_number}</h3>
+        <Scoreboard game={$game} />
+    </div>
 
-    <Scoreboard game={$game} />
-
-    <Turnboard game={$game} />
+    <Turnboard turn={$game.turn_number} game={$game} />
 {/if}

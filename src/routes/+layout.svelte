@@ -45,7 +45,7 @@
     </svelte:fragment>
     
     <div class="flex justify-center">
-        <div class="variant-glass-surface rounded w-2/3 mt-5 px-5 py-2 min-h-[70vh]">
+        <div class="flex flex-col variant-glass-surface rounded w-3/5 mt-5 px-5 py-2 min-h-[70vh]">
             <slot />
         </div>
     </div>

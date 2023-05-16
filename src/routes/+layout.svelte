@@ -5,15 +5,42 @@
 
     import { user } from '$lib/stores/auth.js';
     import Login from '$lib/components/login.svelte';
+
+    import { AppBar } from '@skeletonlabs/skeleton';
+    import { Modal, modalStore } from '@skeletonlabs/skeleton';
+
+    const openLogin = () => {
+        modalStore.trigger({type: 'component', component: {
+            ref: Login, 
+            props: { submitCallback: () => modalStore.close(), cancelCallback: () => modalStore.close()}
+        }})
+    };
+
 </script>
 
-<h1>N OVER 2</h1>
-{#if $user }
-    <h2>Welcome, {$user.name}</h2>
-    <button on:click={user.logout}>Log Out</button>
-{:else}
-    <Login />
-{/if}
+<Modal />
+
+<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
+	<svelte:fragment slot="lead">
+        <div class="flex gap-4">
+            {#if $user }
+                <h2>Welcome, {$user.name}</h2>
+                <button on:click={user.logout} class="btn btn-sm variant-ghost">Log Out</button>
+            {:else}
+                <button on:click={openLogin} class="btn btn-sm variant-ghost">Log In</button>
+            {/if}
+        </div>
+    </svelte:fragment>
+    
+    <span class="h1">
+        N Over 2
+    </span>
+    	
+    <svelte:fragment slot="trail">
+        &nbsp;
+    </svelte:fragment>
+</AppBar>
+
 
 <slot />
 

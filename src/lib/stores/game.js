@@ -13,10 +13,12 @@ class Game {
         this.host_name = null;
         this.host_id = null;
         this.host_score = 0;
+        this.host_ready = null;
 
         this.opponent_name = null;
         this.opponent_id = null;
         this.opponent_score = 0;
+        this.opponent_ready = null;
         
         this.winner_id = null;
 

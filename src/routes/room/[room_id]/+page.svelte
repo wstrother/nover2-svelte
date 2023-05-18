@@ -10,8 +10,8 @@
     let selection;
     let disabled;
 
-    // still not correct, check if user is host or opp
-    $: disabled = $user ? $game.host_move && $game.opponent_move : true;
+    let ready;
+    $: ready = $game.host_ready && $game.opponent_ready
 
     game.set_room_id(data.room_id);
     game.load_data();
@@ -19,6 +19,7 @@
     const submit_move = () => {
         console.log('selected ', selection);
         game.submit_move(selection);
+        disabled = true;
     }
 </script>
 
@@ -33,13 +34,19 @@
         <Scoreboard game={$game} />
     </div>
 
-    <Turnboard game={$game} />
-
+    
+    {#if ready}
+    <div class="h2 self-center py-5">Select a number...</div>
     <Choices bind:value={selection} disabled={disabled}/>
-
-    <button 
+    
+        <button 
         disabled={selection === 0 || disabled} 
         class="btn variant-filled-primary w-1/2 self-center my-5"
         on:click={submit_move}
-    >Submit</button>
+        >Submit</button>
+    {:else}
+        <Turnboard game={$game} />
+    {/if}
+
+    <p>{ready}</p>
 {/if}

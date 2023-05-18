@@ -2,6 +2,22 @@ import { supabase } from "$lib/supabaseClient";
 import { writable } from "svelte/store";
 
 
+class Turn {
+    constructor() {
+        this.host_move = null;
+        this.opponent_move = null;
+        this.winner_id = "";
+    }
+
+    update_data(data) {
+        Object.keys(this).filter(k => Object.keys(data).includes(k))
+            .forEach(key => {
+                this[key] = data[key];
+            });
+    }
+}
+
+
 class Game {
     constructor() {
         this.viewable = null;
@@ -25,6 +41,8 @@ class Game {
         this.turn_number = 1;
         this.host_move = null;
         this.opponent_move = null;
+
+        this.current_turn = new Turn();
     }
 
     update_data(data) {
@@ -32,6 +50,10 @@ class Game {
             .forEach(key => {
                 this[key] = data[key];
             });
+    }
+
+    update_current_turn(data) {
+        this.current_turn.update_data(data);
     }
 
     reset_data() {
@@ -66,7 +88,7 @@ game.load_turn = async () => {
 
         if (error) console.log(error);
         if (data && data[0]) {
-            current_game.update_data(data[0]);
+            current_game.update_current_turn(data[0]);
         }
     
     game.set(current_game);
@@ -99,8 +121,14 @@ game.set_room_id = (room_id) => {
 }
 
 game.submit_move = async (move) => {
-    console.log('submitting move')
     const {data, error} = await supabase.rpc('add_new_move', {new_move: move, rid: current_game.room_id});
+
+    if (data) console.log(data);
+    if (error) console.log(error);
+}
+
+game.set_ready = async () => {
+    const {data, error} = await supabase.rpc('set_ready', {rid: current_game.room_id});
 
     if (data) console.log(data);
     if (error) console.log(error);

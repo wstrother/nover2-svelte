@@ -17,9 +17,14 @@
     game.load_data();
 
     const submit_move = () => {
-        console.log('selected ', selection);
         game.submit_move(selection);
         disabled = true;
+    }
+
+    const ready_next_turn = () => {
+        game.set_ready();
+        selection = 0;
+        disabled = false;
     }
 </script>
 
@@ -46,7 +51,10 @@
         >Submit</button>
     {:else}
         <Turnboard game={$game} />
-    {/if}
 
-    <p>{ready}</p>
+        <button 
+        class="btn variant-filled-primary w-1/2 self-center my-5"
+        on:click={ready_next_turn}
+        >Ready for next turn?</button>
+    {/if}
 {/if}

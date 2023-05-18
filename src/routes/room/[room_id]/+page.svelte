@@ -3,10 +3,17 @@
     import Scoreboard from '$lib/components/room/scoreboard.svelte';
     import Turnboard from '$lib/components/room/turnboard.svelte';
     import RoomHeader from '$lib/components/room/roomHeader.svelte';
+    import Choices from '../../../lib/components/room/choices.svelte';
     export let data;
 
+    let selection;
     game.set_room_id(data.room_id);
     game.load_data();
+
+    const submit_move = () => {
+        console.log('selected ', selection);
+        game.submit_move(selection);
+    }
 </script>
 
 
@@ -20,5 +27,13 @@
         <Scoreboard game={$game} />
     </div>
 
-    <Turnboard turn={$game.turn_number} game={$game} />
+    <Turnboard game={$game} />
+
+    <Choices bind:value={selection}/>
+
+    <button 
+        disabled={selection === 0} 
+        class="btn variant-filled-primary w-1/2 self-center my-5"
+        on:click={submit_move}
+    >Submit</button>
 {/if}

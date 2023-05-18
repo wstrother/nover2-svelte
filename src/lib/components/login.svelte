@@ -12,7 +12,7 @@
     }
 </script>
 
-<div class="rounded-md p-5 variant-ghost flex-initial">
+<div class="rounded-md p-5 variant-glass flex-initial">
     <form on:submit|preventDefault={onSubmit}>
         <label for="login-email">Email</label>
         <input type="email" id="login-email" bind:value={email} />

@@ -99,3 +99,11 @@ game.set_room_id = (room_id) => {
     
     game.load_data();
 }
+
+game.submit_move = async (move) => {
+    console.log('submitting move')
+    const {data, error} = await supabase.rpc('add_new_move', {new_move: move, rid: current_game.room_id});
+
+    if (data) console.log(data);
+    if (error) console.log(error);
+}

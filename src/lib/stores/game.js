@@ -79,20 +79,16 @@ game.set_room_id = (room_id) => {
 
     supabase
         .channel('any')
-        .on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'rooms', filter: `id=eq.${room_id}`}, payload => {
+        .on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'turns', filter: `room_id=eq.${room_id}`}, payload => {
+            console.log("payload received");
             if (payload.new) {
-                current_game.update_data(payload.new);
-                game.set(current_game);
+                game.load_data();
             }
         })
-        .subscribe();
-    
-    supabase
-        .channel('any')
-        .on('postgres_changes', {event: '*', schema: 'public', table: 'turns', filter: `room_id=eq.${room_id}`}, payload => {
+        .on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'rooms', filter: `id=eq.${room_id}`}, payload => {
+            console.log("payload received");
             if (payload.new) {
-                current_game.update_data(payload.new);
-                game.set(current_game);
+                game.load_data();
             }
         })
         .subscribe();

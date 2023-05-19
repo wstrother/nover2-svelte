@@ -14,7 +14,7 @@
 
 </script>
 
-<div class="flex flex-col items-stretch w-1/2 mx-auto">
+<div class="flex flex-col items-stretch min-w-1/2 mx-auto">
     <RadioGroup display="flex justify-center justify-items-stretch" >
         {#each choices as choice}
             <RadioItem 

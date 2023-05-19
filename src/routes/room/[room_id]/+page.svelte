@@ -10,7 +10,7 @@
     let selection;
     let disabled;
 
-    let ready, winner_name;
+    let ready;
     $: ready = $game.host_ready && $game.opponent_ready
 
     game.set_room_id(data.room_id);
@@ -48,7 +48,7 @@
         disabled={selection === 0 || disabled} 
         class="btn variant-filled-primary w-1/2 self-center my-5"
         on:click={submit_move}
-        >Submit</button>
+        >{disabled ? 'Waiting for opponent...' : 'Submit'}</button>
     {:else}
         <Turnboard game={$game} />
 
@@ -56,7 +56,7 @@
             <button 
                 class="btn variant-filled-primary w-1/2 self-center my-5"
                 on:click={ready_next_turn}
-            >Ready for next turn?</button>
+            >{disabled ? 'Ready for next turn?' : 'Waiting for opponent...'}</button>
         {:else}
             <Wrapup game={$game}/>
         {/if}

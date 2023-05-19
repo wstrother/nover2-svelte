@@ -22,8 +22,10 @@
 </script>
 
 <div class="grid grid-cols-2 h1 my-4 variant-ghost-surface w-4/5 mx-auto">
-    <div class="mx-auto self-center col-span-2">Turn { game.turn_number}</div>
+    <div class="mx-auto self-center col-span-2">{game.turn_number ? `Turn ${game.turn_number}` : 'Waiting to Start'}</div>
     <Turn player_n={game.current_turn.host_move} player_name={game.host_name} winner={host_win}/>
     <Turn player_n={game.current_turn.opponent_move} player_name={game.opponent_name} winner={opponent_win}/>
-    <div class="mx-auto self-center col-span-2 h2">{win_text ?? ''}</div>
+    {#if game.current_turn.host_move && game.current_turn.opponent_move}
+        <div class="mx-auto self-center col-span-2 h2">{win_text ?? ''}</div>
+    {/if}
 </div>

@@ -9,7 +9,7 @@
 
 <div class={cls_str}>
 {#if !player_n}
-    <p>{player_name} is selecting a number...</p>
+    <p>Waiting for {player_name}...</p>
 {:else}
     <p>{player_name} has selected</p>
     <div class="h1 text-primary-300">{player_n}</div>

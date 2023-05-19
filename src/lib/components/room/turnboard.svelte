@@ -2,22 +2,22 @@
     export let game;
     import Turn from "./turn.svelte";
 
-    // let host_win, opponent_win;
-    // $: host_win = game.host_id
-    let winner_id = game.current_turn.winner_id;
-    let host_win, opponent_win, win_text;
+    let winner_id, host_win, opponent_win, win_text;
+    $: winner_id = game.current_turn.winner_id
 
-    if (winner_id === game.host_id) {
-        host_win = true;
-        win_text = `${game.host_name} wins!`
-    }
-
-    if (winner_id === game.opponent_id) {
-        opponent_win = true;
-        win_text = `${game.opponent_name} wins!`
-    }
-
-    if (!winner_id) win_text = 'Draw'
+    $:{
+        if (winner_id === game.host_id) {
+            host_win = true;
+            win_text = `${game.host_name} wins!`
+        }
+    
+        if (winner_id === game.opponent_id) {
+            opponent_win = true;
+            win_text = `${game.opponent_name} wins!`
+        }
+    
+        if (!winner_id) win_text = 'Draw'
+    } 
 
 </script>
 

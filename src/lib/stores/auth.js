@@ -5,7 +5,7 @@ import { writable } from "svelte/store";
 export const user = new writable();
 
 supabase.auth.onAuthStateChange(async (event, session) => {
-    console.log(event)
+    // console.log(event)
     if (session) {
         const {data, error} = await supabase
             .from('profiles')

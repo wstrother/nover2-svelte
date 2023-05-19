@@ -37,6 +37,10 @@ class Game {
         this.opponent_ready = null;
         
         this.winner_id = null;
+        this.winner_name = null;
+        this.loser_name = null;
+        this.winner_score = null;
+        this.loser_score = null;
 
         this.turn_number = 1;
         this.host_move = null;
@@ -80,17 +84,19 @@ game.load_data = async () => {
         }
     }
     game.set(current_game);
-    console.log(current_game);
+    // console.log(current_game);
 }
 
 game.load_turn = async () => {
     const {data, error} = await supabase.rpc('get_current_turn', {rid: current_game.room_id});
 
-        if (error) console.log(error);
-        if (data && data[0]) {
-            current_game.update_current_turn(data[0]);
-        }
-    
+    if (error) console.log(error);
+    if (data && data[0]) {
+        current_game.update_current_turn(data[0]);
+    }
+
+    // console.log('loaded turn', data[0])
+    // console.log(current_game)
     game.set(current_game);
 }
 
@@ -123,13 +129,13 @@ game.set_room_id = (room_id) => {
 game.submit_move = async (move) => {
     const {data, error} = await supabase.rpc('add_new_move', {new_move: move, rid: current_game.room_id});
 
-    if (data) console.log(data);
-    if (error) console.log(error);
+    // if (data) console.log(data);
+    // if (error) console.log(error);
 }
 
 game.set_ready = async () => {
     const {data, error} = await supabase.rpc('set_ready', {rid: current_game.room_id});
 
-    if (data) console.log(data);
-    if (error) console.log(error);
+    // if (data) console.log(data);
+    // if (error) console.log(error);
 }

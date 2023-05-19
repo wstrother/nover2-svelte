@@ -1,16 +1,16 @@
 <script>
     import { game } from '$lib/stores/game.js';
-    import { user } from '$lib/stores/auth.js';
     import Scoreboard from '$lib/components/room/scoreboard.svelte';
     import Turnboard from '$lib/components/room/turnboard.svelte';
     import RoomHeader from '$lib/components/room/roomHeader.svelte';
-    import Choices from '../../../lib/components/room/choices.svelte';
+    import Choices from '$lib/components/room/choices.svelte';
+    import Wrapup from '$lib/components/room/wrapup.svelte';
     export let data;
 
     let selection;
     let disabled;
 
-    let ready;
+    let ready, winner_name;
     $: ready = $game.host_ready && $game.opponent_ready
 
     game.set_room_id(data.room_id);
@@ -52,9 +52,14 @@
     {:else}
         <Turnboard game={$game} />
 
-        <button 
-        class="btn variant-filled-primary w-1/2 self-center my-5"
-        on:click={ready_next_turn}
-        >Ready for next turn?</button>
+        {#if !$game.winner_id}
+            <button 
+                class="btn variant-filled-primary w-1/2 self-center my-5"
+                on:click={ready_next_turn}
+            >Ready for next turn?</button>
+        {:else}
+            <Wrapup game={$game}/>
+        {/if}
+
     {/if}
 {/if}
